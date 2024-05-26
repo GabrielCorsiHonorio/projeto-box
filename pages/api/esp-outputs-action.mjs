@@ -1,6 +1,6 @@
+// api/esp-outputs-action.mjs
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -15,40 +15,37 @@ function test_input(data) {
 }
 
 // Function to create an output
-const createOutput = async (name, board, gpio, state) => {
+async function createOutput(name, board, gpio, state) {
     try {
-      const newOutput = await prisma.outputs.create({
-        data: {
-          name,
-          board,
-          gpio,
-          state,
-        },
-      });
-  
-      // Check if board exists, if not, create it
-      const existingBoard = await prisma.boards.findFirst({
-        where: {
-          board,
-        },
-      });
-  
-      if (!existingBoard) {
-        await prisma.boards.create({
-          data: {
-            board,
-          },
+        const newOutput = await prisma.outputs.create({
+            data: {
+                name,
+                board,
+                gpio,
+                state,
+            },
         });
-      }
-  
-      return { message: 'Output created successfully', output: newOutput };
+
+        // Check if board exists, if not, create it
+        const existingBoard = await prisma.boards.findFirst({
+            where: {
+                board: board,
+            },
+        });
+
+        if (!existingBoard) {
+            await prisma.boards.create({
+                data: {
+                    board: board,
+                },
+            });
+        }
+
+        return { message: 'Output created successfully', output: newOutput };
     } catch (error) {
-      console.error(error);
-      throw new Error('Failed to create output');
+        throw error;
     }
-  };
-  
-  export { createOutput };
+}
 
 // Function to get all output states of a board
 async function getAllOutputStates(board) {
@@ -134,7 +131,7 @@ async function deleteOutput(id) {
         if (remainingOutputs.length === 0) {
             await prisma.boards.delete({
                 where: {
-                    board: output.board,
+                    id: output.board,
                 },
             });
         }
@@ -197,4 +194,4 @@ router.get('/', async (req, res) => {
     }
 });
 
-export default router
+export default router;

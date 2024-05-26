@@ -1,8 +1,8 @@
 // pages/_app.js
-import '../public/esp-style.css';
+import '/public/css/styles.css';
 
-function Home({ Component, pageProps }) {
+function stylerouter({ Component, pageProps }) {
   return <Component {...pageProps} />
 }
 
-export default Home;
+export default stylerouter;
