@@ -1,0 +1,137 @@
+<!-- public/index.html -->
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/esp-style.css">
+  <title>ESP Output Control</title>
+</head>
+<body>
+  <h2>ESP Output Control</h2>
+  <div id="outputs"></div>
+  <br><br>
+  <div id="boards"></div>
+  <br><br>
+  <div>
+    <form id="createOutputForm">
+      <h3>Create New Output</h3>
+      <label for="outputName">Name</label>
+      <input type="text" name="name" id="outputName" required><br>
+      <label for="outputBoard">Board ID</label>
+      <input type="number" name="board" min="0" id="outputBoard" required>
+      <label for="outputGpio">GPIO Number</label>
+      <input type="number" name="gpio" min="0" id="outputGpio" required>
+      <label for="outputState">Initial GPIO State</label>
+      <select id="outputState" name="state">
+        <option value="0">0 = OFF</option>
+        <option value="1">1 = ON</option>
+      </select>
+      <button type="submit">Create Output</button>
+      <p><strong>Note:</strong> in some devices, you might need to refresh the page to see your newly created buttons or to remove deleted buttons.</p>
+    </form>
+  </div>
+
+  <script>
+    async function updateOutput(element) {
+      try {
+        const response = await fetch(`/api/esp-outputs-action?action=output_update&id=${element.id}&state=${element.checked ? 1 : 0}`, {
+          method: 'GET',
+        });
+        if (!response.ok) {
+          throw new Error('Failed to update output');
+        }
+        alert('Output state updated successfully');
+      } catch (error) {
+        console.error(error);
+        alert('Failed to update output');
+      }
+    }
+
+    async function deleteOutput(element) {
+      const result = confirm('Want to delete this output?');
+      if (result) {
+        try {
+          const response = await fetch(`/api/esp-outputs-action?action=output_delete&id=${element.id}`, {
+            method: 'GET',
+          });
+          if (!response.ok) {
+            throw new Error('Failed to delete output');
+          }
+          alert('Output deleted');
+          setTimeout(() => { window.location.reload(); }, 500);
+        } catch (error) {
+          console.error(error);
+          alert('Failed to delete output');
+        }
+      }
+    }
+
+    async function createOutput(event) {
+      event.preventDefault();
+      const form = document.getElementById('createOutputForm');
+      const formData = new FormData(form);
+      const outputData = {
+        action: 'output_create',
+        name: formData.get('name'),
+        board: formData.get('board'),
+        gpio: formData.get('gpio'),
+        state: formData.get('state'),
+      };
+
+      try {
+        const response = await fetch('/api/esp-outputs-action', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(outputData),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to create output');
+        }
+        alert('Output created');
+        setTimeout(() => { window.location.reload(); }, 500);
+      } catch (error) {
+        console.error(error);
+        alert('Failed to create output');
+      }
+    }
+
+    async function fetchOutputsAndBoards() {
+      try {
+        const response = await fetch('/api/outputs');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const { outputs, boards } = await response.json();
+
+        let htmlButtons = '';
+        outputs.forEach((row) => {
+          const buttonChecked = row.state === 1 ? 'checked' : '';
+          htmlButtons += `
+            <h3>${row.name} - Board ${row.board} - GPIO ${row.gpio} (<i><a onclick="deleteOutput(this)" href="javascript:void(0);" id="${row.id}">Delete</a></i>)</h3>
+            <label class="switch">
+              <input type="checkbox" onchange="updateOutput(this)" id="${row.id}" ${buttonChecked}>
+              <span class="slider"></span>
+            </label>
+          `;
+        });
+        document.getElementById('outputs').innerHTML = htmlButtons;
+
+        let htmlBoards = '<h3>Boards</h3>';
+        boards.forEach((row) => {
+          htmlBoards += `<p><strong>Board ${row.board}</strong> - Last Request Time: ${row.last_request}</p>`;
+        });
+        document.getElementById('boards').innerHTML = htmlBoards;
+      } catch (error) {
+        console.error(error);
+        alert('Failed to fetch data');
+      }
+    }
+
+    document.getElementById('createOutputForm').addEventListener('submit', createOutput);
+    fetchOutputsAndBoards();
+  </script>
+</body>
+</html>
