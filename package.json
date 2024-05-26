@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "postinstall": "prisma generate && node seed.js",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "migrate-and-build": "npx prisma migrate deploy && next build"
   },
   "keywords": [],
   "author": "",

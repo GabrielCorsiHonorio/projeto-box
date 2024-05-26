@@ -2,7 +2,6 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  // Inserir dados na tabela Outputs
   await prisma.outputs.create({
     data: {
       name: "Built-in LED",
@@ -12,7 +11,6 @@ async function main() {
     }
   });
 
-  // Inserir dados na tabela Boards
   await prisma.boards.create({
     data: {
       board: 1
