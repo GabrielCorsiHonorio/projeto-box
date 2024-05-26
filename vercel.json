@@ -1,24 +1,16 @@
 {
-    "routes": [
-      {
-        "handle": "filesystem"
-      },
-      {
-        "src": "/api/boards",
-        "dest": "server.mjs"
-      },
-      {
-        "src": "/api/esp-outputs-action",
-        "dest": "server.mjs"
-      },
-      {
-        "src": "/api/outputs",
-        "dest": "server.mjs"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "server.mjs"
-      }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.mjs",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "index.js",
+      "use": "@vercel/static-build"
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/server.mjs" }
+  ]
+}
