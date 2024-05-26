@@ -99,6 +99,9 @@ async function updateOutput(id, state) {
     }
 }
 
+
+
+// Function to delete an output
 // Function to delete an output
 async function deleteOutput(id) {
     try {
@@ -141,6 +144,8 @@ async function deleteOutput(id) {
         throw error;
     }
 }
+
+
 
 // Route to handle POST requests
 router.post('/', async (req, res) => {
