@@ -1,0 +1,24 @@
+{
+    "routes": [
+      {
+        "handle": "filesystem"
+      },
+      {
+        "src": "/api/boards",
+        "dest": "server.mjs"
+      },
+      {
+        "src": "/api/esp-outputs-action",
+        "dest": "server.mjs"
+      },
+      {
+        "src": "/api/outputs",
+        "dest": "server.mjs"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "server.mjs"
+      }
+    ]
+  }
+  
