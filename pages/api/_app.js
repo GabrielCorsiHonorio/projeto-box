@@ -1,5 +1,5 @@
 // pages/_app.js
-import '../public/styles.css';
+import '../public/esp-style.css';
 
 function Home({ Component, pageProps }) {
   return <Component {...pageProps} />
