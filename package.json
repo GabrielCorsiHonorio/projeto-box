@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
-    "postinstall": "prisma generate && node seed.js",
+    "postinstall": "prisma generate",
     "migrate": "prisma migrate dev",
     "migrate-and-build": "npx prisma migrate deploy && next build"
   },
