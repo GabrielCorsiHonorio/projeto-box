@@ -1,4 +1,5 @@
 // api/esp-outputs-action.mjs
+
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 
@@ -17,6 +18,7 @@ function test_input(data) {
 // Function to create an output
 async function createOutput(name, board, gpio, state) {
     try {
+        console.log(`Creating output with name: ${name}, board: ${board}, gpio: ${gpio}, state: ${state}`);
         const newOutput = await prisma.outputs.create({
             data: {
                 name,
@@ -34,6 +36,7 @@ async function createOutput(name, board, gpio, state) {
         });
 
         if (!existingBoard) {
+            console.log(`Board ${board} not found, creating new board.`);
             await prisma.boards.create({
                 data: {
                     board: board,
@@ -43,6 +46,7 @@ async function createOutput(name, board, gpio, state) {
 
         return { message: 'Output created successfully', output: newOutput };
     } catch (error) {
+        console.error('Error creating output:', error);
         throw error;
     }
 }
@@ -50,6 +54,7 @@ async function createOutput(name, board, gpio, state) {
 // Function to get all output states of a board
 async function getAllOutputStates(board) {
     try {
+        console.log(`Getting all output states for board: ${board}`);
         const result = await prisma.outputs.findMany({
             where: {
                 board: parseInt(board),
@@ -65,10 +70,21 @@ async function getAllOutputStates(board) {
             outputStates[row.gpio] = row.state;
         });
 
-        // Update last board request time
-        await prisma.boards.update({
+        // Find the board ID
+        const boardRecord = await prisma.boards.findFirst({
             where: {
                 board: parseInt(board),
+            },
+        });
+
+        if (!boardRecord) {
+            throw new Error(`Board with number ${board} not found`);
+        }
+
+        // Update last board request time using the board ID
+        await prisma.boards.update({
+            where: {
+                id: boardRecord.id,
             },
             data: {
                 last_request: new Date(),
@@ -77,6 +93,7 @@ async function getAllOutputStates(board) {
 
         return outputStates;
     } catch (error) {
+        console.error('Error getting output states:', error);
         throw error;
     }
 }
@@ -84,6 +101,7 @@ async function getAllOutputStates(board) {
 // Function to update the state of an output
 async function updateOutput(id, state) {
     try {
+        console.log(`Updating output with id: ${id}, new state: ${state}`);
         await prisma.outputs.update({
             where: {
                 id: parseInt(id),
@@ -95,16 +113,18 @@ async function updateOutput(id, state) {
 
         return { message: 'Output state updated successfully' };
     } catch (error) {
+        console.error('Error updating output:', error);
         throw error;
     }
 }
 
-
-
 // Function to delete an output
-// Function to delete an output
+// Função para deletar um output
 async function deleteOutput(id) {
     try {
+        console.log(`Attempting to delete output with id: ${id}`);
+
+        // Encontrar o output pelo ID
         const output = await prisma.outputs.findUnique({
             where: {
                 id: parseInt(id),
@@ -114,23 +134,27 @@ async function deleteOutput(id) {
             },
         });
 
+        // Verificar se o output foi encontrado
         if (!output) {
+            console.error(`Output with id ${id} not found`);
             throw new Error('Output not found');
         }
 
+        // Deletar o output
         await prisma.outputs.delete({
             where: {
                 id: parseInt(id),
             },
         });
 
-        // Check if board still has outputs, if not, delete it
+        // Verificar se a placa ainda possui outros outputs
         const remainingOutputs = await prisma.outputs.findMany({
             where: {
                 board: output.board,
             },
         });
 
+        // Se não houver mais outputs, deletar a placa
         if (remainingOutputs.length === 0) {
             await prisma.boards.delete({
                 where: {
@@ -139,62 +163,65 @@ async function deleteOutput(id) {
             });
         }
 
+        console.log(`Output with id ${id} deleted successfully`);
         return { message: 'Output deleted successfully' };
     } catch (error) {
+        console.error(`Error deleting output with id ${id}:`, error);
         throw error;
     }
 }
 
-
-
-// Route to handle POST requests
-router.post('/', async (req, res) => {
+// Função para manipular ações GET e POST
+router.all('/', async (req, res) => {
     try {
-        let { action, name, board, gpio, state } = req.body;
+        const action = req.method === 'POST' ? req.body.action : req.query.action;
+        console.log(`Received ${req.method} request with action: ${action}`);
 
-        if (action === 'output_create') {
-            name = test_input(name);
-            board = parseInt(test_input(board));
-            gpio = parseInt(test_input(gpio));
-            state = parseInt(test_input(state));
+        if (!action) {
+            return res.status(400).json({ error: 'Action is required' });
+        }
 
-            const result = await createOutput(name, board, gpio, state);
-            res.status(200).json(result);
+        if (req.method === 'POST') {
+            let { name, board, gpio, state } = req.body;
+            switch (action) {
+                case 'output_create':
+                    name = test_input(name);
+                    board = parseInt(test_input(board));
+                    gpio = parseInt(test_input(gpio));
+                    state = parseInt(test_input(state));
+                    const createResult = await createOutput(name, board, gpio, state);
+                    res.status(200).json(createResult);
+                    break;
+                default:
+                    res.status(400).json({ error: 'Invalid action for POST request.' });
+            }
+        } else if (req.method === 'GET') {
+            let { id, board, state } = req.query;
+            switch (action) {
+                case 'outputs_state':
+                    board = test_input(board);
+                    const statesResult = await getAllOutputStates(board);
+                    res.status(200).json(statesResult);
+                    break;
+                case 'output_update':
+                    id = test_input(id);
+                    state = test_input(state);
+                    const updateResult = await updateOutput(id, state);
+                    res.status(200).json(updateResult);
+                    break;
+                case 'output_delete':
+                    id = test_input(id);
+                    const deleteResult = await deleteOutput(id);
+                    res.status(200).json(deleteResult);
+                    break;
+                default:
+                    res.status(400).json({ error: 'Invalid action for GET request.' });
+            }
         } else {
-            res.status(400).json({ error: 'No data posted with HTTP POST.' });
+            res.status(405).json({ error: 'Method not allowed' });
         }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to create output' });
-    }
-});
-
-// Route to handle GET requests
-router.get('/', async (req, res) => {
-    try {
-        let { action, id, board, state } = req.query;
-
-        if (action === 'outputs_state') {
-            board = test_input(board);
-
-            const result = await getAllOutputStates(board);
-            res.status(200).json(result);
-        } else if (action === 'output_update') {
-            id = test_input(id);
-            state = test_input(state);
-
-            const result = await updateOutput(id, state);
-            res.status(200).json(result);
-        } else if (action === 'output_delete') {
-            id = test_input(id);
-
-            const result = await deleteOutput(id);
-            res.status(200).json(result);
-        } else {
-            res.status(400).json({ error: 'Invalid HTTP request.' });
-        }
-    } catch (error) {
-        console.error(error);
+        console.error('Internal server error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
