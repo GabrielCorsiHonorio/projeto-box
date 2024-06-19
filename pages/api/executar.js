@@ -3,12 +3,15 @@ import moment from 'moment-timezone';
 
 const prisma = new PrismaClient();
 
+let ultimaAcao = null;
+
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { acao, estado } = req.body;
 
     if (acao){
         console.log('Ação recebida:', acao);
+        ultimaAcao = acao;
 
     try {
 
@@ -34,8 +37,25 @@ export default async function handler(req, res) {
         res.status(400).json({ error: "Dados inválidos na requisição" });
       }
     
+  } else if (req.method === 'GET') {
+    // Lógica para lidar com requisição GET do ESP32
+    if (req.url === '/acao') {
+      if (ultimaAcao) {
+        res.status(200).json({ acao: ultimaAcao });
+      } else {
+        res.status(404).json({ error: "Nenhuma ação registrada ainda" });
+      }
+    } else if (req.url === '/botao') {
+      // Simulação de estado do botão
+      const botao = {
+        estado: 'apertado'
+      };
+      res.status(200).json(botao);
+    } else {
+      res.status(404).json({ error: "Rota não encontrada" });
+    }
   } else {
-    res.setHeader('Allow', ['POST']);
+    res.setHeader('Allow', ['POST', 'GET']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
