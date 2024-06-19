@@ -22,3 +22,18 @@ model Boards {
   board         Int
   last_request  DateTime @default(now()) @updatedAt
 }
+
+model Action {
+  id     Int    @id @default(autoincrement())
+  acao   String
+  ordem  Int
+  date   DateTime?
+}
+
+
+model ExecutedAction {
+  id   Int      @id @default(autoincrement())
+  date DateTime
+}
+
+
