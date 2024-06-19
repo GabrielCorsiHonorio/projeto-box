@@ -6,11 +6,16 @@
       "use": "@vercel/node"
     },
     {
-      "src": "index.js",
+      "src": "pages/**/*",
+      "use": "@vercel/static-build"
+    },
+    {
+      "src": "public/**/*",
       "use": "@vercel/static-build"
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/server.mjs" }
+    { "src": "/(.*)", "dest": "/pages/$1" },
+    { "src": "/", "dest": "/pages/index.js" }
   ]
 }
