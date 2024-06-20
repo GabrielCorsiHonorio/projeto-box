@@ -45,7 +45,7 @@ const Comando = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ acao: acao.acao }),
+            body: JSON.stringify({ id: acao.id, acao: acao.acao }),
           });
     
           if (!envioAction.ok) {

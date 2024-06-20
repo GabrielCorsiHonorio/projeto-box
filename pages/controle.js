@@ -133,7 +133,14 @@ const handleEdit = (action) => {
       <form onSubmit={handleSubmit}>
         <label>
           Ação:
-          <input type="text" name="acao" value={formData.acao} onChange={handleChange} required />
+          <select type="text" name="acao" value={formData.acao} onChange={handleChange} required >
+          <option value="">Selecione uma opção</option>
+          <option value="A1">A1</option>
+          <option value="A2">A2</option>
+          <option value="A31">A31</option>
+          <option value="A32">A32</option>
+          <option value="A33">A33</option>
+          </select>
         </label>
         <br />
         <label>

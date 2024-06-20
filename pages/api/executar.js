@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 let acaoGlobal = null;
 let estadoGlobal = null;
 let execucaoGlobal = null;
+let idGlobal = null;
 
 export default async function handler(req, res) {
     try {
@@ -17,9 +18,10 @@ export default async function handler(req, res) {
         }
 
         if (req.method === 'POST') {
-            const { acao, estado, execucao } = req.body;
+            const { id, acao, estado, execucao } = req.body;
             switch (action) {
                 case 'acao':
+                    idGlobal = id;
                     acaoGlobal = acao;
                     console.log('Acao recebida do post', acao);
                     res.status(201).json(acao);
@@ -28,10 +30,18 @@ export default async function handler(req, res) {
                     estadoGlobal = estado;
                     console.log('Estado recebido do post', estado);
                     res.status(201).json(estado);
+                    // Configure um timeout para mudar a variável global para null após 2 minutos
+                    setTimeout(() => {
+                    estadoGlobal = null;
+                    console.log('Variável global estadoGlobal configurada para null após 2 minutos.');
+                    }, 2 * 60 * 1000); // 2 minutos em milissegundos
                     break;
                 case 'execucao':
                     execucaoGlobal = execucao;
                     console.log('Execucao recebida do post', execucao);
+                    if (estadoGlobal === 'executado'){
+                        apagarAcao(idGlobal);
+                    }
                     res.status(201).json(execucao);
                     break;
                 default:
@@ -60,38 +70,30 @@ export default async function handler(req, res) {
     }
 }
 
+const apagarAcao = async (id) => {
 
+       const hoje = moment.tz('America/Sao_Paulo').format('YYYY-MM-DD');
+        const hojeFormat = moment.tz(hoje,'America/Sao_Paulo').toISOString();
+        console.log('Valor do dia no formato', hojeFormat);
 
+      // Buscar a execução mais recente
+      const lastExecution = await prisma.executedAction.findFirst({
+        orderBy: { id: 'desc' },
+      });
+      if (lastExecution) {
+      // Atualizar a data de execução
+      await prisma.executedAction.update({
+          where: { id: lastExecution.id },
+          data: { date: hojeFormat },
+        });
+        console.log('Date que está sendo salva', hojeFormat);
 
-
-
-   //     const hoje = moment.tz('America/Sao_Paulo').format('YYYY-MM-DD');
-    //     // const hojeTeste = '2024-06-21';
-    //     const hojeFormat = moment.tz(hoje,'America/Sao_Paulo').toISOString();
-    //     console.log('Valor do dia no formato', hojeFormat);
-
-    //   // Buscar a execução mais recente
-    //   const lastExecution = await prisma.executedAction.findFirst({
-    //     orderBy: { id: 'desc' },
-    //   });
-    //   if (lastExecution) {
-
-
-    //   // Executar a ação (para fins de teste, um console log)
-    //   console.log('Ação executada');
-
-    //   // Atualizar a data de execução
-    //   await prisma.executedAction.update({
-    //       where: { id: lastExecution.id },
-    //       data: { date: hojeFormat },
-    //     });
-    //     console.log('Date que está sendo salva', hojeFormat);
-
-    //   // Excluir a ação do banco de dados
-    //   await prisma.action.delete({
-    //     where: { id: parseInt(id) },
-    //   });
-    //   console.log('Ação original excluída:', id);
-
-    //   res.status(201).json({ message: 'Ação executada e excluída com sucesso' });
-    //   }
+      // Excluir a ação do banco de dados
+      await prisma.action.delete({
+        where: { id: parseInt(id) },
+      });
+      console.log('Ação original excluída:', id);
+      idGlobal = null;
+      res.status(201).json({ message: 'Ação executada e excluída com sucesso' });
+      }
+}
