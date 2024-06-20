@@ -1,12 +1,33 @@
 import { useState, useEffect } from 'react';
 import DatePicker from "react-datepicker";
+import { useRouter } from 'next/router';
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment-timezone';
 
 const Controle = () => {
+  const [isUser, setIsUser] = useState(false);
   const [formData, setFormData] = useState({ acao: '', ordem: '', date: '' });
   const [actionList, setActionList] = useState([]);
   const [editingId, setEditingId] = useState('');
+  const router = useRouter();
+
+
+  useEffect(() => {
+    console.log('useEffect triggered');
+    const username = localStorage.getItem('username');
+    const authenticated = localStorage.getItem('authenticated');
+
+    console.log('Username from localStorage:', username);
+    console.log('Authenticated from localStorage:', authenticated);
+
+
+    if (username && username === 'gabriel' && authenticated === 'true') {
+      setIsUser(true);
+
+    } else {
+      router.push('/login');
+    }
+  }, [router]);
 
   useEffect(() => {
     fetch('/api/actions')
@@ -100,6 +121,10 @@ const handleEdit = (action) => {
     if (day.length < 2) day = `0${day}`;
   
     return [day, month, year].join('/');
+  }
+
+  if (!isUser) {
+    return <p>Loading...</p>;
   }
 
   return (

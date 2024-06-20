@@ -39,13 +39,13 @@ export default async function handler(req, res) {
     
   } else if (req.method === 'GET') {
     // Lógica para lidar com requisição GET do ESP32
-    if (req.url === '/acao') {
+    if (req.url.startsWith === '/acao') {
       if (ultimaAcao) {
         res.status(200).json({ acao: ultimaAcao });
       } else {
         res.status(404).json({ error: "Nenhuma ação registrada ainda" });
       }
-    } else if (req.url === '/botao') {
+    } else if (req.url.startsWith === '/botao') {
       // Simulação de estado do botão
       const botao = {
         estado: 'apertado'

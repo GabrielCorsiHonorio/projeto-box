@@ -5,8 +5,9 @@ import boardsRouter from './pages/api/boards.mjs';
 import outputsRouter from './pages/api/outputs.mjs';
 import outputsActionRouter from './pages/api/esp-outputs-action.mjs';
 
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(express.static(path.join(process.cwd(), 'public')));

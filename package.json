@@ -2,9 +2,10 @@
   "name": "projeto-box",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module", 
   "scripts": {
     "dev": "next dev",
-    "start": "node --experimental-modules server.mjs",
+    "start": "node src/server.js",
     "vercel-build": "npm run migrate-and-build",
     "postinstall": "prisma generate",
     "migrate": "prisma migrate dev",
