@@ -40,7 +40,6 @@ export default async function handler(req, res) {
                 case 'execucao':
                     execucaoGlobal = execucao;
                     console.log('Execucao recebida do post', execucao);
-                    console.log('Id que será apagado',idGlobal);
                     if (execucao === 'executado'){
                         apagarAcao(idGlobal);
                     }
@@ -77,9 +76,10 @@ async function apagarAcao (id){
        const hoje = moment.tz('America/Sao_Paulo').format('YYYY-MM-DD');
         const hojeFormat = moment.tz(hoje,'America/Sao_Paulo').toISOString();
         console.log('Valor do dia no formato', hojeFormat);
+        console.log('Id que será apagado',id);
 
       // Buscar a execução mais recente
-      await prisma.executedAction.findFirst({
+      const lastExecution = await prisma.executedAction.findFirst({
         orderBy: { id: 'desc' },
       });
       console.log('Data da ultima execucao',lastExecution);
