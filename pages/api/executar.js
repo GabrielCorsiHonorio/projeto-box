@@ -82,7 +82,8 @@ const apagarAcao = async (id) => {
       const lastExecution = await prisma.executedAction.findFirst({
         orderBy: { id: 'desc' },
       });
-      if (lastExecution) {
+      console.log('Data da ultima execucao',lastExecution);
+
       // Atualizar a data de execução
       await prisma.executedAction.update({
           where: { id: lastExecution.id },
@@ -94,8 +95,9 @@ const apagarAcao = async (id) => {
       await prisma.action.delete({
         where: { id: parseInt(id) },
       });
+
       console.log('Ação original excluída:', id);
       idGlobal = null;
       res.status(201).json({ message: 'Ação executada e excluída com sucesso' });
-      }
+
 }
