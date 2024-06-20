@@ -4,7 +4,7 @@ import testeRouter from '../pages/api/teste.js';
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
-const handle = app.getRequestHandler();
+// const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
   const server = express();
@@ -13,9 +13,9 @@ app.prepare().then(() => {
   server.use('/api/teste', testeRouter);
 
   // Roteia todas as outras requisições para o Next.js
-  server.all('*', (req, res) => {
-      return handle(req, res);
-  });
+  // server.all('*', (req, res) => {
+  //     return handle(req, res);
+  // });
 
   const PORT = process.env.PORT || 3001;
   server.listen(PORT, (err) => {
