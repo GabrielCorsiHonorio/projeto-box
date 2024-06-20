@@ -7,6 +7,7 @@ export default async function handler(req, res) {
     try {
       const actions = await prisma.action.findMany();
       res.json(actions);
+      await prisma.$disconnect();
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch actions" });
     }
@@ -40,6 +41,7 @@ export default async function handler(req, res) {
       });
       console.log('Valor da acao ',{newAction});
       res.status(201).json(newAction);
+      await prisma.$disconnect();
     } catch (error) {
       res.status(500).json({ error: "Failed to create action" });
     }
@@ -73,6 +75,7 @@ export default async function handler(req, res) {
         },
       });
       res.status(200).json(updatedAction);
+      await prisma.$disconnect();
     } catch (error) {
       res.status(500).json({ error: "Failed to update action" });
     }
@@ -83,6 +86,7 @@ export default async function handler(req, res) {
         where: { id: parseInt(id) }
       });
       res.status(204).end();
+      await prisma.$disconnect();
     } catch (error) {
       res.status(500).json({ error: "Failed to delete action" });
     }

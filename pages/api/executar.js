@@ -96,6 +96,8 @@ const apagarAcao = async (id) => {
         where: { id: parseInt(id) },
       });
 
+      await prisma.$disconnect();
+
       console.log('Ação original excluída:', id);
       idGlobal = null;
       res.status(201).json({ message: 'Ação executada e excluída com sucesso' });

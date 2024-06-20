@@ -39,12 +39,16 @@ export default async function handler(req, res) {
     });
 
     if (acaoHoje) {
+      await prisma.$disconnect();
       return res.status(200).json(acaoHoje);
     } else {
       // Se não houver ação com a data de hoje, buscar a ação com a menor ordem
+      await prisma.$disconnect();
       const menorOrdemAction = actions.reduce((min, action) => (action.ordem < min.ordem ? action : min), actions[0]);
       return res.status(200).json(menorOrdemAction);
     }
+
+    
 
   }
   } catch (error) {
