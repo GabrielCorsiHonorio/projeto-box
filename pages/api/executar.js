@@ -8,40 +8,6 @@ let estadoGlobal = null;
 let execucaoGlobal = null;
 let idGlobal = null;
 
-async function apagarAcao (id){
-
-
-    const hoje = moment.tz('America/Sao_Paulo').format('YYYY-MM-DD');
-     const hojeFormat = moment.tz(hoje,'America/Sao_Paulo').toISOString();
-     console.log('Valor do dia no formato', hojeFormat);
-     console.log('Id que será apagado',id);
-
-   // Buscar a execução mais recente
-   const lastExecution = await prisma.executedAction.findFirst({
-     orderBy: { id: 'desc' },
-   });
-   console.log('Data da ultima execucao',lastExecution);
-
-   // Atualizar a data de execução
-   await prisma.executedAction.update({
-       where: { id: lastExecution.id },
-       data: { date: hojeFormat },
-     });
-     console.log('Date que está sendo salva', hojeFormat);
-
-   // Excluir a ação do banco de dados
-   await prisma.action.delete({
-     where: { id: parseInt(id) },
-   });
-
-   await prisma.$disconnect();
-
-   console.log('Ação original excluída:', id);
-   idGlobal = null;
-   res.status(201).json({ message: 'Ação executada e excluída com sucesso' });
-
-}
-
 export default async function handler(req, res) {
     try {
         const { action } = req.query;
@@ -74,10 +40,44 @@ export default async function handler(req, res) {
                 case 'execucao':
                     execucaoGlobal = execucao;
                     console.log('Execucao recebida do post', execucao);
-                    if (execucao === 'executado'){
-                        apagarAcao(idGlobal);
-                    }
                     res.status(201).json(execucao);
+                    if (execucao === 'executado'){
+                        try {
+                            const hoje = moment.tz('America/Sao_Paulo').format('YYYY-MM-DD');
+                            const hojeFormat = moment.tz(hoje, 'America/Sao_Paulo').toISOString();
+                            console.log('Valor do dia no formato', hojeFormat);
+                            console.log('ID que será apagado:', idGlobal);
+                    
+                            // Buscar a execução mais recente
+                            const lastExecution = await prisma.executedAction.findFirst({
+                              orderBy: { id: 'desc' },
+                            });
+                            console.log('Data da última execução:', lastExecution);
+                    
+                            // Atualizar a data de execução
+                            await prisma.executedAction.update({
+                              where: { id: lastExecution.id },
+                              data: { date: hojeFormat },
+                            });
+                            console.log('Data que está sendo salva:', hojeFormat);
+                    
+                            // Excluir a ação do banco de dados
+                            await prisma.action.delete({
+                              where: { id: parseInt(idGlobal) },
+                            });
+                    
+                            console.log('Ação original excluída:', idGlobal);
+                    
+                            // Desconectar do Prisma
+                            await prisma.$disconnect();
+                    
+                            res.status(201).json({ message: 'Ação executada e excluída com sucesso' });
+                          } catch (error) {
+                            console.error('Erro ao apagar ação:', error);
+                            await prisma.$disconnect();
+                            res.status(500).json({ error: 'Erro ao executar ação' });
+                          }
+                    }
                     break;
                 default:
                     res.status(400).json({ error: 'Invalid action for POST request.' });
