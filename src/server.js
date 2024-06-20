@@ -1,14 +1,15 @@
 import express from 'express';
-import next from 'next';
+// import next from 'next';
 import testeRouter from '../pages/api/teste.js'; 
 
-const dev = process.env.NODE_ENV !== 'production';
-const app = next({ dev });
+// const dev = process.env.NODE_ENV !== 'production';
+// const app = next({ dev });
 // const handle = app.getRequestHandler();
 
-app.prepare().then(() => {
+// app.prepare().then(() => {
   const server = express();
 
+  server.use(express.json());
   // Roteia os endpoints da API
   server.use('/api/teste', testeRouter);
 
@@ -22,5 +23,5 @@ app.prepare().then(() => {
       if (err) throw err;
       console.log(`> Ready on http://localhost:${PORT}`);
   });
-});
+// });
   
