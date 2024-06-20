@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import styles from '../styles/comando.module.css';
 
 const Comando = () => {
   const [isUser, setIsUser] = useState(false);
   const [acaoDiaria, setAcaoDiaria] = useState('');
   const [loading, setLoading] = useState(false);
   const [executando, setExecutando] = useState(false);
+  const [botaoVisivel, setBotaoVisivel] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -99,6 +101,7 @@ const Comando = () => {
         } catch (error) {
           console.error('Erro ao registrar estado:', error);
         } finally {
+          setAcaoDiaria(false);
           setExecutando(false);
         }
       };
@@ -107,22 +110,34 @@ const Comando = () => {
         return <p>Loading...</p>;
       }
 
+  // return (
+  //   <div>
+  //     <h1>Ação Diária</h1>
+  //     {acaoDiaria ? (
+  //       <div>
+  //         <p>Ação diária selecionada: {acaoDiaria.acao}</p>
+  //         <button onClick={handleAgir} disabled={executando}>
+  //           {executando ? 'Executando...' : 'Agir'}
+  //         </button>
+  //       </div>
+  //     ) : (
+  //       <p>{!loading && 'Ação diária já executada'}</p>
+  //     )}
+  //   </div>
+  // );
+
   return (
-    <div>
-      <h1>Ação Diária</h1>
-      {/* <button onClick={handleBuscarAcaoDiaria} disabled={loading}>
-        {loading ? 'Carregando...' : 'Buscar Ação Diária'}
-      </button> */}
+    <div className={styles.page_container}>
+      <h1 className={styles.heading}>Ação Diária</h1>
       {acaoDiaria ? (
-        <div>
-          <p>Ação diária selecionada: {acaoDiaria.acao}</p>
-          <button onClick={handleAgir} disabled={executando}>
+        <div className={styles.acao_container}>
+          <p className={styles.acao_text}>Ação diária selecionada: {acaoDiaria.acao}</p>
+          <button onClick={handleAgir} disabled={executando} className={styles.acao_button}>
             {executando ? 'Executando...' : 'Agir'}
           </button>
         </div>
       ) : (
-        <p>{!loading && 'Procurando por ações'}</p>
-        // <p>{ 'Nenhuma ação disponível no momento.'}</p>
+        <p className={styles.no_acao_text}>{!loading && 'Ação já executada'}</p>
       )}
     </div>
   );

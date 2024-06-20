@@ -1,0 +1,120 @@
+  /* styles.css */
+
+
+/* Estilos gerais */
+.page_container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Estilos para o formulário */
+.form_container {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form_container h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form_container form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form_container label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.form_container input,
+.form_container select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 20px; /* Bordas arredondadas */
+}
+
+.form_container button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 20px; /* Bordas arredondadas */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form_container button:hover {
+  background-color: #0056b3;
+}
+
+/* Estilos para a tabela */
+.table_container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.table_container h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.table_container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table_container th,
+.table_container td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table_container th {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.table_container td button {
+  padding: 8px 12px;
+  margin-right: 5px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 20px; /* Bordas arredondadas */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.table_container td button:hover {
+  background-color: #0056b3;
+}
+
+.table_container td button:last-child {
+  margin-right: 0;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .form_container form {
+    grid-template-columns: 1fr;
+  }
+}
+
+  

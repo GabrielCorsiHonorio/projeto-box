@@ -72,6 +72,11 @@ export default async function handler(req, res) {
                             });
                     
                             console.log('Ação original excluída:', idGlobal);
+
+                            acaoGlobal = null;
+                            estadoGlobal = null;
+                            execucaoGlobal = null;
+                            idGlobal = null;
                     
                             // Desconectar do Prisma
                             await prisma.$disconnect();

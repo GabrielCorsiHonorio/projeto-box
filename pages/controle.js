@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import { useRouter } from 'next/router';
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment-timezone';
+import styles from '../styles/controle.module.css';
 
 const Controle = () => {
   const [isUser, setIsUser] = useState(false);
@@ -127,64 +128,141 @@ const handleEdit = (action) => {
     return <p>Loading...</p>;
   }
 
+//   return (
+//     <div>
+//       <h1>Controle de Ações</h1>
+//       <form onSubmit={handleSubmit}>
+//         <label>
+//           Ação:
+//           <select type="text" name="acao" value={formData.acao} onChange={handleChange} required >
+//           <option value="">Selecione uma opção</option>
+//           <option value="A1">A1</option>
+//           <option value="A2">A2</option>
+//           <option value="A31">A31</option>
+//           <option value="A32">A32</option>
+//           <option value="A33">A33</option>
+//           </select>
+//         </label>
+//         <br />
+//         <label>
+//           Ordem:
+//           <input type="number" name="ordem" value={formData.ordem} onChange={handleChange} />
+//         </label>
+//         <br />
+//         <label>
+//           Data:
+//           <DatePicker
+//             selected={formData.date}
+//             onChange={handleDateChange}
+//             dateFormat="dd/MM/yyyy"
+//             isClearable
+//             placeholderText="Selecione a data"
+//           />
+//         </label>
+//         <br />
+//         <button type="submit">{editingId ? 'Atualizar Ação' : 'Adicionar Ação'}</button>
+//       </form>
+//       <h2>Lista de Ações</h2>
+//       <table>
+//         <thead>
+//           <tr>
+//             <th>Ação</th>
+//             <th>Ordem</th>
+//             <th>Data</th>
+//             <th>Ações</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {actionList.map((action) => (
+//             <tr key={action.id}>
+//               <td>{action.acao}</td>
+//               <td>{action.ordem}</td>
+//               <td>{action.date ? formatDate(action.date) : ''}</td>
+//               <td>
+//                 <button onClick={() => handleEdit(action)}>Editar</button>
+//                 <button onClick={() => handleDelete(action.id)}>Excluir</button>
+//               </td>
+//             </tr>
+//           ))}
+//         </tbody>
+//       </table>
+//     </div>
+//   );
+
+
   return (
-    <div>
-      <h1>Controle de Ações</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Ação:
-          <select type="text" name="acao" value={formData.acao} onChange={handleChange} required >
-          <option value="">Selecione uma opção</option>
-          <option value="A1">A1</option>
-          <option value="A2">A2</option>
-          <option value="A31">A31</option>
-          <option value="A32">A32</option>
-          <option value="A33">A33</option>
-          </select>
-        </label>
-        <br />
-        <label>
-          Ordem:
-          <input type="number" name="ordem" value={formData.ordem} onChange={handleChange} />
-        </label>
-        <br />
-        <label>
-          Data:
-          <DatePicker
-            selected={formData.date}
-            onChange={handleDateChange}
-            dateFormat="dd/MM/yyyy"
-            isClearable
-            placeholderText="Selecione a data"
-          />
-        </label>
-        <br />
-        <button type="submit">{editingId ? 'Atualizar Ação' : 'Adicionar Ação'}</button>
-      </form>
-      <h2>Lista de Ações</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Ação</th>
-            <th>Ordem</th>
-            <th>Data</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {actionList.map((action) => (
-            <tr key={action.id}>
-              <td>{action.acao}</td>
-              <td>{action.ordem}</td>
-              <td>{action.date ? formatDate(action.date) : ''}</td>
-              <td>
-                <button onClick={() => handleEdit(action)}>Editar</button>
-                <button onClick={() => handleDelete(action.id)}>Excluir</button>
-              </td>
+    <div className={styles.page_container}>
+      <div className={styles.form_container}>
+        <h1 >Controle de Ações</h1>
+        <form onSubmit={handleSubmit} className={styles.action_form}>
+          <label>
+            Ação:
+            <select
+              type="text"
+              name="acao"
+              value={formData.acao}
+              onChange={handleChange}
+              required
+              className="form-control"
+            >
+              <option value="">Selecione uma opção</option>
+              <option value="A1">A1</option>
+              <option value="A2">A2</option>
+              <option value="A31">A31</option>
+              <option value="A32">A32</option>
+              <option value="A33">A33</option>
+            </select>
+          </label>
+          <label>
+            Ordem:
+              <input type="number" name="ordem" value={formData.ordem} onChange={handleChange} className ={styles.form_control} />
+          </label>
+          <label>
+            Data:
+            <DatePicker
+              selected={formData.date}
+              onChange={handleDateChange}
+              dateFormat="dd/MM/yyyy"
+              isClearable
+              placeholderText="Selecione a data"
+              className="form-control"
+            />
+          </label>
+          <button type="submit" className={styles.btn_submit}>
+            {editingId ? 'Atualizar Ação' : 'Adicionar Ação'}
+          </button>
+        </form>
+      </div>
+      <div className={styles.table_container}>
+        <h2>Lista de Ações</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Ação</th>
+              <th>Ordem</th>
+              <th>Data</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {actionList.map((action) => (
+              <tr key={action.id}>
+                <td>{action.acao}</td>
+                <td>{action.ordem}</td>
+                <td>{action.date ? formatDate(action.date) : ''}</td>
+                <td>
+                  <button onClick={() => handleEdit(action)} className={styles.btn_edit}>
+                    Editar
+                  </button>
+                  <button onClick={() => handleDelete(action.id)} className={styles.btn_delete}>
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
