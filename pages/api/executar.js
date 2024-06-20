@@ -3,62 +3,63 @@ import moment from 'moment-timezone';
 
 const prisma = new PrismaClient();
 
-let ultimaAcao = null;
+let acaoGlobal = null;
+let estadoGlobal = null;
+let execucaoGlobal = null;
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { acao, estado } = req.body;
-
-    if (acao){
-        console.log('Ação recebida:', acao);
-        ultimaAcao = acao;
-
     try {
+        const { action } = req.query;
+        console.log(`Received ${req.method} request with action: ${action}`);
 
-        res.status(201).json({ message: 'Ação recebida com sucesso', acao });
-
-    } catch (error) {
-      console.error('Erro ao registrar a ação executada:', error);
-      res.status(500).json({ error: "Failed to register executed action" });
-    }
-    } else if (estado === 'apertado') {
-        console.log('estado de botão recebida:', estado);
-  
-        try {
-          // Processamento da ação de botão (armazenamento ou qualquer outra lógica necessária)
-          // Para este exemplo, apenas estamos retornando a ação de botão recebida
-  
-          res.status(201).json({ message: 'Ação de botão recebida com sucesso', acaoRecebida: estado });
-        } catch (error) {
-          console.error('Erro ao registrar a ação do botão:', error);
-          res.status(500).json({ error: "Failed to register button action" });
+        if (!action) {
+            return res.status(400).json({ error: 'Action is required' });
         }
-      } else {
-        res.status(400).json({ error: "Dados inválidos na requisição" });
-      }
-    
-  } else if (req.method === 'GET') {
-    // Lógica para lidar com requisição GET do ESP32
-    if (req.url.startsWith === '/acao') {
-      if (ultimaAcao) {
-        res.status(200).json({ acao: ultimaAcao });
-      } else {
-        res.status(404).json({ error: "Nenhuma ação registrada ainda" });
-      }
-    } else if (req.url.startsWith === '/botao') {
-      // Simulação de estado do botão
-      const botao = {
-        estado: 'apertado'
-      };
-      res.status(200).json(botao);
-    } else {
-      res.status(404).json({ error: "Rota não encontrada" });
+
+        if (req.method === 'POST') {
+            const { acao, estado, execucao } = req.body;
+            switch (action) {
+                case 'acao':
+                    acaoGlobal = acao;
+                    console.log('Acao recebida do post', acao);
+                    res.status(201).json(acao);
+                    break;
+                case 'estado':
+                    estadoGlobal = estado;
+                    console.log('Estado recebido do post', estado);
+                    res.status(201).json(estado);
+                    break;
+                case 'execucao':
+                    execucaoGlobal = execucao;
+                    console.log('Execucao recebida do post', execucao);
+                    res.status(201).json(execucao);
+                    break;
+                default:
+                    res.status(400).json({ error: 'Invalid action for POST request.' });
+            }
+        } else if (req.method === 'GET') {
+            switch (action) {
+                case 'acao':
+                    console.log('Acao enviada ao get', acaoGlobal);
+                    res.status(200).json(acaoGlobal);
+                    break;
+                case 'estado':
+                    console.log('Estado enviado ao get', estadoGlobal);
+                    res.status(200).json(estadoGlobal);
+                    break;
+                default:
+                    res.status(400).json({ error: 'Invalid action for GET request.' });
+            }
+        } else {
+          res.setHeader('Allow', ['POST', 'GET']);
+          res.status(405).end(`Method ${req.method} Not Allowed`);
+        }
+    } catch (error) {
+        console.error('Internal server error:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-  } else {
-    res.setHeader('Allow', ['POST', 'GET']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
 }
+
 
 
 

@@ -40,7 +40,7 @@ const Comando = () => {
       if (acao) {
         setAcaoDiaria(acao);
 
-        const envioAction = await fetch('/api/teste?action=acao', {
+        const envioAction = await fetch('/api/executar?action=acao', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ const Comando = () => {
         setExecutando(true);
         try {
           // Enviar o ID da ação para o servidor para registrar a execução
-          const response = await fetch('/api/teste?action=estado', {
+          const response = await fetch('/api/executar?action=estado', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
