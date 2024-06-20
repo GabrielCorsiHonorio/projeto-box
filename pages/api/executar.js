@@ -40,7 +40,7 @@ export default async function handler(req, res) {
                 case 'execucao':
                     execucaoGlobal = execucao;
                     console.log('Execucao recebida do post', execucao);
-                    res.status(201).json(execucao);
+                    // res.status(201).json(execucao);
                     if (execucao === 'executado'){
                         try {
                             const hoje = moment.tz('America/Sao_Paulo').format('YYYY-MM-DD');
@@ -52,6 +52,11 @@ export default async function handler(req, res) {
                             const lastExecution = await prisma.executedAction.findFirst({
                               orderBy: { id: 'desc' },
                             });
+
+                            if (!lastExecution) {
+                                throw new Error('Nenhuma execução encontrada');
+                              }
+
                             console.log('Data da última execução:', lastExecution);
                     
                             // Atualizar a data de execução
