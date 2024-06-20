@@ -71,15 +71,15 @@ export default async function handler(req, res) {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+async function apagarAcao (id){
 
-const apagarAcao = async (id) => {
 
        const hoje = moment.tz('America/Sao_Paulo').format('YYYY-MM-DD');
         const hojeFormat = moment.tz(hoje,'America/Sao_Paulo').toISOString();
         console.log('Valor do dia no formato', hojeFormat);
 
       // Buscar a execução mais recente
-      const lastExecution = await prisma.executedAction.findFirst({
+      await prisma.executedAction.findFirst({
         orderBy: { id: 'desc' },
       });
       console.log('Data da ultima execucao',lastExecution);
