@@ -22,6 +22,7 @@ export default async function handler(req, res) {
             switch (action) {
                 case 'acao':
                     idGlobal = id;
+                    console.log('Id que será recebiudo',id);
                     acaoGlobal = acao;
                     console.log('Acao recebida do post', acao);
                     res.status(201).json(acao);
@@ -39,7 +40,8 @@ export default async function handler(req, res) {
                 case 'execucao':
                     execucaoGlobal = execucao;
                     console.log('Execucao recebida do post', execucao);
-                    if (estadoGlobal === 'executado'){
+                    console.log('Id que será apagado',idGlobal);
+                    if (execucao === 'executado'){
                         apagarAcao(idGlobal);
                     }
                     res.status(201).json(execucao);
