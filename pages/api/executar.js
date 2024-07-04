@@ -91,9 +91,6 @@ export default async function handler(req, res) {
                           }
                     }else{
                       acaoGlobal = null;
-                      estadoGlobal = null;
-                      execucaoGlobal = null;
-                      idGlobal = null;
                       lastActionGlobal = null;
                     }
                     break;
