@@ -58,6 +58,8 @@ const direto = () => {
             },
             body: JSON.stringify({ acao:'A51', func:'tampa' }),
           });
+
+          
     
           if (!response.ok) {
             const data = await response.json();

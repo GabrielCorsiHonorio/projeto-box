@@ -111,6 +111,10 @@ export default async function handler(req, res) {
                               }); 
                               res.status(201).json(acaoGlobal);
                               await prisma.$disconnect();
+                              setTimeout(() => {
+                                acaoGlobal = null;
+                                console.log('Variável global acaoGlobal configurada para null após 5s');
+                                }, 5  * 1000); 
                             } catch (error) {
                                 res.status(500).json({ error: "Failed to create action" });
                               } 
@@ -133,6 +137,10 @@ export default async function handler(req, res) {
 
                               res.status(201).json(acaoGlobal);
                               await prisma.$disconnect();
+                              setTimeout(() => {
+                                acaoGlobal = null;
+                                console.log('Variável global acaoGlobal configurada para null após 5s');
+                                }, 5  * 1000); 
                             } catch (error) {
                                 res.status(500).json({ error: "Failed to create action" });
                               } 
