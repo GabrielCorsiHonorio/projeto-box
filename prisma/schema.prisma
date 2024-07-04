@@ -28,12 +28,19 @@ model Action {
   acao   String
   ordem  Int
   date   DateTime?
+  nome   String?
 }
 
 
 model ExecutedAction {
   id   Int      @id @default(autoincrement())
   date DateTime
+}
+
+model LastAction {
+  id            Int      @id @default(autoincrement())
+  func   String?      
+  action String?
 }
 
 

@@ -12,7 +12,7 @@ export default async function handler(req, res) {
       res.status(500).json({ error: "Failed to fetch actions" });
     }
   } else if (req.method === 'POST') {
-    const { acao, ordem, date } = req.body;
+    const { acao, ordem, date, nome } = req.body;
     console.log('Received body:', req.body);
     if (!acao) {
       return res.status(400).json({ error: "Ação é obrigatória" });
@@ -37,6 +37,7 @@ export default async function handler(req, res) {
           acao,
           ordem: ordem !== null && ordem !== undefined ? parseInt(ordem) : null,
           date: formattedDate,
+          nome: nome !== null && nome !== undefined ? nome : null,
         },
       });
       console.log('Valor da acao ',{newAction});
@@ -46,7 +47,7 @@ export default async function handler(req, res) {
       res.status(500).json({ error: "Failed to create action" });
     }
   } else if (req.method === 'PUT') {
-    const { id, acao, ordem, date } = req.body;
+    const { id, acao, ordem, date, nome } = req.body;
     console.log('Received update body:', req.body);
     if (!acao) {
       return res.status(400).json({ error: "Ação é obrigatória" });
@@ -72,6 +73,7 @@ export default async function handler(req, res) {
           acao,
           ordem: ordem !== null && ordem !== undefined ? parseInt(ordem) : null,
           date: formattedDate,
+          nome: nome !== null && nome !== undefined ? nome : null,
         },
       });
       res.status(200).json(updatedAction);

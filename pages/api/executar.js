@@ -18,7 +18,7 @@ export default async function handler(req, res) {
         }
 
         if (req.method === 'POST') {
-            const { id, acao, estado, execucao } = req.body;
+            const { id, acao, estado, execucao, func } = req.body;
             switch (action) {
                 case 'acao':
                     idGlobal = id;
@@ -38,6 +38,7 @@ export default async function handler(req, res) {
                     }, 2 * 60 * 1000); // 2 minutos em milissegundos
                     break;
                 case 'execucao':
+                    idGlobal = id;
                     execucaoGlobal = execucao;
                     console.log('Execucao recebida do post', execucao);
                     // res.status(201).json(execucao);
@@ -89,6 +90,54 @@ export default async function handler(req, res) {
                           }
                     }
                     break;
+                    case 'direto':
+
+
+                        if (func === 'tampa'){
+
+                            const lastAction = await prisma.lastAction.findUnique({
+                                where: { id: 2 },
+                              });
+                              if (lastAction.action === "A52"){
+                                acaoGlobal = "A51";
+                              }else{
+                                acaoGlobal = "A52";
+                              }
+                            try{
+                                    await prisma.lastAction.update({
+                                where: { id: 2 },
+                                data: { 
+                                    action: acaoGlobal, },
+                              }); 
+                              res.status(201).json(acaoGlobal);
+                              await prisma.$disconnect();
+                            } catch (error) {
+                                res.status(500).json({ error: "Failed to create action" });
+                              } 
+                        }else{
+
+                            const lastAction = await prisma.lastAction.findUnique({
+                                where: { id: 1 },
+                              });
+                              if (lastAction.action === "A42"){
+                                acaoGlobal = "A41";
+                              }else{
+                                acaoGlobal = "A42";
+                              }
+                            try{
+                                 await prisma.lastAction.update({
+                                where: { id: 1 },
+                                data: {
+                                    action: acaoGlobal, },
+                              });
+
+                              res.status(201).json(acaoGlobal);
+                              await prisma.$disconnect();
+                            } catch (error) {
+                                res.status(500).json({ error: "Failed to create action" });
+                              } 
+                        };
+                        break;
                 default:
                     res.status(400).json({ error: 'Invalid action for POST request.' });
             }

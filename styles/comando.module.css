@@ -2,17 +2,37 @@
 
 /* Estilos gerais */
 .page_container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
   
   .heading {
     font-size: 24px;
     margin-bottom: 20px;
     color: #333;
   }
+
+  .header {
+    width: 100%;
+    background-color: #333;
+    padding: 10px 0;
+  }
+  
+  .nav {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 20px;
+  }
+  
+  .nav_link {
+    color: white;
+    margin-right: 20px;
+    text-decoration: none;
+    font-size: 18px;
+  }
+  
   
   /* Estilos para a ação diária */
   .acao_container {
@@ -51,5 +71,83 @@
   .no_acao_text {
     font-size: 18px;
     color: #333;
+  }
+  
+  .postsList {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .container {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+    
+  
+  .media {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .media img, 
+  .media video 
+  .media audio {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+  
+  .videoContainer {
+    position: relative;
+    width: 100%;
+    padding-top: 75%; /* Proporção de aspecto 4:3 (calculado como 3 / 4 * 100) */
+    overflow: hidden;
+  }
+  
+  .videoContainer video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  
+  /* Ocultar o botão de tela cheia no Chrome */
+  .video::-webkit-media-controls-fullscreen-button,
+  .audio::-webkit-media-controls-fullscreen-button {
+    display: none;
+  }
+  
+  /* Ocultar o botão de tela cheia no Firefox */
+  .video::-moz-fullscreen-button,
+  .audio::-moz-fullscreen-button {
+    display: none;
+  }
+  
+  /* Ocultar o botão de tela cheia no IE/Edge */
+  .video::-ms-fullscreen-button,
+  .audio::-ms-fullscreen-button {
+    display: none;
   }
   

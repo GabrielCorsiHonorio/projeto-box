@@ -7,7 +7,7 @@ import styles from '../styles/controle.module.css';
 
 const Controle = () => {
   const [isUser, setIsUser] = useState(false);
-  const [formData, setFormData] = useState({ acao: '', ordem: '', date: '' });
+  const [formData, setFormData] = useState({ acao: '', ordem: '', date: '', nome: '' });
   const [actionList, setActionList] = useState([]);
   const [editingId, setEditingId] = useState('');
   const router = useRouter();
@@ -62,6 +62,7 @@ const Controle = () => {
         acao: formData.acao,
         ordem: formData.ordem ? parseInt(formData.ordem) : null,
         date: formData.date ? moment.tz(formData.date, 'America/Sao_Paulo').toISOString() : '',
+        nome: formData.nome ? formData.nome : null,
       };
 
     try {
@@ -83,7 +84,7 @@ const Controle = () => {
     //     const errorData = await response.json();
     //     throw new Error(errorData.error || 'Unknown error');
     //   }
-    setFormData({ acao: '', ordem: '', date: '' });
+    setFormData({ acao: '', ordem: '', date: '', nome: '' });
     setEditingId(null);
     fetch('/api/actions')
       .then(res => res.json())
@@ -98,6 +99,7 @@ const handleEdit = (action) => {
       acao: action.acao || '',
       ordem: action.ordem !== undefined ? action.ordem.toString() : '',
       date: formData.date ? moment.tz(formData.date, 'America/Sao_Paulo').toISOString() : '',
+      nome: action.nome !== undefined ? action.nome.toString() : '',
     });
     setEditingId(action.id);
   };
@@ -127,67 +129,6 @@ const handleEdit = (action) => {
   if (!isUser) {
     return <p>Loading...</p>;
   }
-
-//   return (
-//     <div>
-//       <h1>Controle de Ações</h1>
-//       <form onSubmit={handleSubmit}>
-//         <label>
-//           Ação:
-//           <select type="text" name="acao" value={formData.acao} onChange={handleChange} required >
-//           <option value="">Selecione uma opção</option>
-//           <option value="A1">A1</option>
-//           <option value="A2">A2</option>
-//           <option value="A31">A31</option>
-//           <option value="A32">A32</option>
-//           <option value="A33">A33</option>
-//           </select>
-//         </label>
-//         <br />
-//         <label>
-//           Ordem:
-//           <input type="number" name="ordem" value={formData.ordem} onChange={handleChange} />
-//         </label>
-//         <br />
-//         <label>
-//           Data:
-//           <DatePicker
-//             selected={formData.date}
-//             onChange={handleDateChange}
-//             dateFormat="dd/MM/yyyy"
-//             isClearable
-//             placeholderText="Selecione a data"
-//           />
-//         </label>
-//         <br />
-//         <button type="submit">{editingId ? 'Atualizar Ação' : 'Adicionar Ação'}</button>
-//       </form>
-//       <h2>Lista de Ações</h2>
-//       <table>
-//         <thead>
-//           <tr>
-//             <th>Ação</th>
-//             <th>Ordem</th>
-//             <th>Data</th>
-//             <th>Ações</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {actionList.map((action) => (
-//             <tr key={action.id}>
-//               <td>{action.acao}</td>
-//               <td>{action.ordem}</td>
-//               <td>{action.date ? formatDate(action.date) : ''}</td>
-//               <td>
-//                 <button onClick={() => handleEdit(action)}>Editar</button>
-//                 <button onClick={() => handleDelete(action.id)}>Excluir</button>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
 
 
   return (
@@ -228,6 +169,10 @@ const handleEdit = (action) => {
               className="form-control"
             />
           </label>
+        <label>
+          Nome:
+        <input type="text" name="nome" value={formData.nome} onChange={handleChange} className={styles.form_control} />
+        </label>
           <button type="submit" className={styles.btn_submit}>
             {editingId ? 'Atualizar Ação' : 'Adicionar Ação'}
           </button>
@@ -241,6 +186,7 @@ const handleEdit = (action) => {
               <th>Ação</th>
               <th>Ordem</th>
               <th>Data</th>
+              <th>Nome</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -250,6 +196,7 @@ const handleEdit = (action) => {
                 <td>{action.acao}</td>
                 <td>{action.ordem}</td>
                 <td>{action.date ? formatDate(action.date) : ''}</td>
+                <td>{action.nome}</td>
                 <td>
                   <button onClick={() => handleEdit(action)} className={styles.btn_edit}>
                     Editar

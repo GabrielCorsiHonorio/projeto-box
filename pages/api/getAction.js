@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     const lastExecutionDate = moment(lastExecution.date).format('YYYY-MM-DD');
     // console.log('execucoes:', lastExecutionDate);
 
-    if (lastExecutionDate === hojeTeste) {
+    if (lastExecutionDate === hoje) {
       console.log('Ação diária já executada');
       return res.status(400).json({ error: 'Ação diária já executada' });
     }

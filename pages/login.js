@@ -29,7 +29,7 @@ const handleLogin = async () => {
     if (username === 'gabriel') {
       router.push('/controle');// Redirecionar para a página de upload para o admin
     } else {
-      router.push('/comando');
+      router.push('/home');
     }
   } else {
     setError(result.message);
