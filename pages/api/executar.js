@@ -7,6 +7,7 @@ let acaoGlobal = null;
 let estadoGlobal = null;
 let execucaoGlobal = null;
 let idGlobal = null;
+let lastActionGlobal = null;
 
 export default async function handler(req, res) {
     try {
@@ -88,13 +89,19 @@ export default async function handler(req, res) {
                             await prisma.$disconnect();
                             res.status(500).json({ error: 'Erro ao executar ação' });
                           }
+                    }else{
+                      acaoGlobal = null;
+                      estadoGlobal = null;
+                      execucaoGlobal = null;
+                      idGlobal = null;
+                      lastActionGlobal = null;
                     }
                     break;
                     case 'direto':
 
-
-                        if (func === 'tampa'){
-
+                      if (lastActionGlobal === null){
+                      if (func === 'tampa'){
+                          console.log('Executar func');
                             const lastAction = await prisma.lastAction.findUnique({
                                 where: { id: 2 },
                               });
@@ -111,15 +118,12 @@ export default async function handler(req, res) {
                               }); 
                               res.status(201).json(acaoGlobal);
                               await prisma.$disconnect();
-                              setTimeout(() => {
-                                acaoGlobal = null;
-                                console.log('Variável global acaoGlobal configurada para null após 5s');
-                                }, 5  * 1000); 
+                              lastActionGlobal = 'executando';
                             } catch (error) {
                                 res.status(500).json({ error: "Failed to create action" });
                               } 
                         }else{
-
+                          console.log('Executar func');
                             const lastAction = await prisma.lastAction.findUnique({
                                 where: { id: 1 },
                               });
@@ -137,14 +141,15 @@ export default async function handler(req, res) {
 
                               res.status(201).json(acaoGlobal);
                               await prisma.$disconnect();
-                              setTimeout(() => {
-                                acaoGlobal = null;
-                                console.log('Variável global acaoGlobal configurada para null após 5s');
-                                }, 5  * 1000); 
+                              lastActionGlobal = 'executando';
                             } catch (error) {
                                 res.status(500).json({ error: "Failed to create action" });
                               } 
                         };
+                      }else{
+                        console.log('executando ainda');
+                        res.status(201).json(acaoGlobal);
+                      }
                         break;
                 default:
                     res.status(400).json({ error: 'Invalid action for POST request.' });

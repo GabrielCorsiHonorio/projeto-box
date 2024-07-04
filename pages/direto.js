@@ -4,6 +4,7 @@ import styles from '../styles/controle.module.css';
 
 const direto = () => {
     const [isUser, setIsUser] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
     const router = useRouter();
 
 
@@ -35,7 +36,7 @@ const direto = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ acao:'A42', func:'gaveta' }),
+            body: JSON.stringify({  func:'gaveta' }),
           });
     
           if (!response.ok) {
@@ -46,6 +47,10 @@ const direto = () => {
         //   const data = await response.json();
         //   console.log('o valor da ação retornada é',data.action)
           console.log('Estado registrado com sucesso');
+          setIsDisabled(true);
+          setTimeout(() => {
+            setIsDisabled(false);
+          }, 5000);
 
       };
 
@@ -56,7 +61,7 @@ const direto = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ acao:'A51', func:'tampa' }),
+            body: JSON.stringify({ func:'tampa' }),
           });
 
           
@@ -67,9 +72,13 @@ const direto = () => {
             // throw new Error('Erro ao registrar a ação');
           }
 
-        //   const data = await response.json();
-        //   console.log(data)
+          const data = await response.json();
+          console.log(data)
           console.log('Estado registrado com sucesso');
+          setIsDisabled(true);
+          setTimeout(() => {
+            setIsDisabled(false);
+          }, 5000);
 
       };
     
@@ -80,14 +89,14 @@ const direto = () => {
             <h1 >Controle de Ações</h1>
               <label>
                 <h2>Gaveta</h2> 
-                <button onClick={() => handleGaveta()} className={styles.btn_edit}>
+                <button onClick={() => handleGaveta()} className={styles.btn_edit} disabled={isDisabled}>
                         Abrir/Fechar
                         
                 </button>
               </label>
               <label>
               <h2>Tampa</h2> 
-                <button onClick={() => handleTampa()} className={styles.btn_edit}>
+                <button onClick={() => handleTampa()} className={styles.btn_edit} disabled={isDisabled}>
                         Abrir/Fechar
                 </button>
               </label>

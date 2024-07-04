@@ -99,7 +99,7 @@ const handleEdit = (action) => {
       acao: action.acao || '',
       ordem: action.ordem !== undefined ? action.ordem.toString() : '',
       date: formData.date ? moment.tz(formData.date, 'America/Sao_Paulo').toISOString() : '',
-      nome: action.nome !== undefined ? action.nome.toString() : '',
+      nome: action.nome || '',
     });
     setEditingId(action.id);
   };

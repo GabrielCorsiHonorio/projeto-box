@@ -59,6 +59,11 @@
   background-color: #0056b3;
 }
 
+.btn_edit:disabled {
+  background-color: lightgray;
+  cursor: not-allowed;
+}
+
 /* Estilos para a tabela */
 .table_container {
   padding: 20px;
