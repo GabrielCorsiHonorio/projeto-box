@@ -101,12 +101,13 @@ export default async function handler(req, res) {
                     case 'concluido':
                       acaoGlobal = null;
                       lastActionGlobal = null;
+                      res.status(201).json({ message: 'Ação direta executada com sucesso' });
                     break;
                   }
                     break;
                     case 'direto':
 
-                      if (lastActionGlobal === null){
+                      if (!lastActionGlobal){
                         console.log('não há açoes')
                       if (func === 'tampa'){
                           console.log('Executar func');

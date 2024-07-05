@@ -50,7 +50,7 @@ const direto = () => {
           setIsDisabled(true);
           setTimeout(() => {
             setIsDisabled(false);
-          }, 5000);
+          }, 20000);
 
       };
 
@@ -78,7 +78,7 @@ const direto = () => {
           setIsDisabled(true);
           setTimeout(() => {
             setIsDisabled(false);
-          }, 5000);
+          }, 20000);
 
       };
     
