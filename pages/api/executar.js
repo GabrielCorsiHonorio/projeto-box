@@ -1,13 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 import moment from 'moment-timezone';
+import { useState } from 'react';
 
 const prisma = new PrismaClient();
+
+
 
 let acaoGlobal = null;
 let estadoGlobal = null;
 let execucaoGlobal = null;
-let idGlobal = null;
 let lastActionGlobal = null;
+let idGlobal = null;
 
 export default async function handler(req, res) {
     try {
@@ -23,7 +26,7 @@ export default async function handler(req, res) {
             switch (action) {
                 case 'acao':
                     idGlobal = id;
-                    console.log('Id que será recebiudo',id);
+                    console.log('Id que será recebido',idGlobal);
                     acaoGlobal = acao;
                     console.log('Acao recebida do post', acao);
                     res.status(201).json(acao);
@@ -39,7 +42,11 @@ export default async function handler(req, res) {
                     }, 2 * 60 * 1000); // 2 minutos em milissegundos
                     break;
                 case 'execucao':
+                  if(!idGlobal){
+                    console.log('não existe id.')
                     idGlobal = id;
+                  }
+                    
                     execucaoGlobal = execucao;
                     console.log('Execucao recebida do post', execucao);
                     // res.status(201).json(execucao);
