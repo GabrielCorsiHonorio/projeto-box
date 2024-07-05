@@ -62,6 +62,12 @@
 .btn_edit:disabled {
   background-color: lightgray;
   cursor: not-allowed;
+
+}
+
+/* Regra adicional para hover de botões desabilitados */
+.btn_edit:disabled:hover {
+  background-color: lightgray;
 }
 
 /* Estilos para a tabela */

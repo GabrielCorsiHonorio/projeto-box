@@ -49,7 +49,9 @@ export default async function handler(req, res) {
                     execucaoGlobal = execucao;
                     console.log('Execucao recebida do post', execucao);
                     // res.status(201).json(execucao);
-                    if (execucao === 'executado'){
+
+                    switch (execucao){
+                    case 'executado':
                         try {
                             const hoje = moment.tz('America/Sao_Paulo').format('YYYY-MM-DD');
                             const hojeFormat = moment.tz(hoje, 'America/Sao_Paulo').toISOString();
@@ -95,14 +97,17 @@ export default async function handler(req, res) {
                             await prisma.$disconnect();
                             res.status(500).json({ error: 'Erro ao executar ação' });
                           }
-                    }else{
+                          break;  
+                    case 'concluido':
                       acaoGlobal = null;
                       lastActionGlobal = null;
-                    }
+                    break;
+                  }
                     break;
                     case 'direto':
 
                       if (lastActionGlobal === null){
+                        console.log('não há açoes')
                       if (func === 'tampa'){
                           console.log('Executar func');
                             const lastAction = await prisma.lastAction.findUnique({
