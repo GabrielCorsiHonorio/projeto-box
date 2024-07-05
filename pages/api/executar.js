@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import moment from 'moment-timezone';
-import { useState } from 'react';
 
 const prisma = new PrismaClient();
 
@@ -85,7 +84,7 @@ export default async function handler(req, res) {
                             acaoGlobal = null;
                             estadoGlobal = null;
                             execucaoGlobal = null;
-                            idGlobal = null;
+                            idGlobal = null ;
                     
                             // Desconectar do Prisma
                             await prisma.$disconnect();
