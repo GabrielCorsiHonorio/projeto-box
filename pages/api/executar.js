@@ -131,7 +131,7 @@ export default async function handler(req, res) {
                             } catch (error) {
                                 res.status(500).json({ error: "Failed to create action" });
                               } 
-                        }else{
+                        }else if (func === 'gaveta'){
                           console.log('Executar func');
                             const lastAction = await prisma.lastAction.findUnique({
                                 where: { id: 1 },
@@ -154,19 +154,21 @@ export default async function handler(req, res) {
                             } catch (error) {
                                 res.status(500).json({ error: "Failed to create action" });
                               } 
+                        }else{
+                          if(acao === "A60"){
+                            acaoGlobal = "A60";
+                            setTimeout(() => {
+                              acaoGlobal = null;
+                              console.log('Variável global estadoGlobal configurada para null após 2 minutos.');
+                              }, 20 * 1000); // 2 minutos em milissegundos
+                          }
                         };
                       }else{
                         console.log('executando ainda');
                         res.status(201).json(acaoGlobal);
                       }
 
-                      if(acao === "A60"){
-                        acaoGlobal = "A60";
-                        setTimeout(() => {
-                          acaoGlobal = null;
-                          console.log('Variável global estadoGlobal configurada para null após 2 minutos.');
-                          }, 20 * 1000); // 2 minutos em milissegundos
-                      }
+
                         break;
                 default:
                     res.status(400).json({ error: 'Invalid action for POST request.' });
