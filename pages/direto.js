@@ -81,6 +81,34 @@ const direto = () => {
           }, 20000);
 
       };
+
+      const handleCarta = async () => {
+
+        const response = await fetch('/api/executar?action=direto', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ acao:'A60' }),
+          });
+
+          
+    
+          if (!response.ok) {
+            const data = await response.json();
+            alert(data.error || 'Erro ao registrar a ação');
+            // throw new Error('Erro ao registrar a ação');
+          }
+
+          const data = await response.json();
+          console.log(data)
+          console.log('Estado registrado com sucesso');
+          setIsDisabled(true);
+          setTimeout(() => {
+            setIsDisabled(false);
+          }, 20000);
+
+      };
     
     
       return (
@@ -98,6 +126,12 @@ const direto = () => {
               <h2>Tampa</h2> 
                 <button onClick={() => handleTampa()} className={styles.btn_edit} disabled={isDisabled}>
                         Abrir/Fechar
+                </button>
+              </label>
+              <label>
+              <h2>Carta</h2> 
+                <button onClick={() => handleCarta()} className={styles.btn_edit} disabled={isDisabled}>
+                        Ejetar
                 </button>
               </label>
           </div>
