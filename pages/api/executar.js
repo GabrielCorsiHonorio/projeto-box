@@ -155,17 +155,20 @@ export default async function handler(req, res) {
                                 res.status(500).json({ error: "Failed to create action" });
                               } 
                         }else{
-                          if(acao === "A60"){
-                            acaoGlobal = "A60";
-                            setTimeout(() => {
-                              acaoGlobal = null;
-                              console.log('Variável global estadoGlobal configurada para null após 2 minutos.');
-                              }, 20 * 1000); // 2 minutos em milissegundos
-                          }
+                          console.log('Ação incorreta');
+                          res.status(201).json(acaoGlobal);
                         };
                       }else{
                         console.log('executando ainda');
                         res.status(201).json(acaoGlobal);
+                      }
+
+                      if(acao === "A60"){
+                        acaoGlobal = "A60";
+                        setTimeout(() => {
+                          acaoGlobal = null;
+                          console.log('Variável global estadoGlobal configurada para null após 2 minutos.');
+                          }, 20 * 1000); // 2 minutos em milissegundos
                       }
 
 
