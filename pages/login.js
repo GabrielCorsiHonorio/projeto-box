@@ -40,22 +40,22 @@ const handleLogin = async () => {
   return (
     <div className={styles.pageContainer}>
       <div className={styles.loginContainer}>
-        <h1 className={styles.h1}>Bienvenue</h1>
+        <h1 className={styles.h1}>Login</h1>
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Nom d'utilisateur"
+          placeholder="Gabriel ou Eshlyn"
           className={styles.input}
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Mot de passe"
+          placeholder="Senha"
           className={styles.input}
         />
-        <button onClick={handleLogin} className={styles.button}>Connexion</button>
+        <button onClick={handleLogin} className={styles.button}>Entrar</button>
         {error && <p className={styles.error}>{error}</p>}
       </div>
     </div>

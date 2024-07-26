@@ -25,7 +25,7 @@ const Home = () => {
         /> */}
       </div>
       <div className={styles.content}>
-        <h1 className={styles.title}>Bem-vindo ao Projeto GCH à Paris</h1>
+        <h1 className={styles.title}>Projeto do Gabriel e da Eshlyn</h1>
         <button className={styles.startButton} onClick={handleLoginRedirect}>
           Começar
         </button>
