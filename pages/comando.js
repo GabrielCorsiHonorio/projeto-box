@@ -1,15 +1,20 @@
 import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import styles from '../styles/comando.module.css';
+import { FaBars } from 'react-icons/fa';
 
 const Comando = () => {
   const [isUser, setIsUser] = useState(false);
   const [acaoDiaria, setAcaoDiaria] = useState('');
   const [acaoAudio, setAcaoAudio] = useState('');
+  const [acaoCarta, setAcaoCarta] = useState('');
   const [loading, setLoading] = useState(false);
   const [executando, setExecutando] = useState(false);
   const [files, setFiles] = useState([]);
   const [controlsVisible, setControlsVisible] = useState(false);
+  const [CaseLetr, setCaseLetr] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [UsuAdmin, setUsuAdmin] = useState(false);
 
   const videoRef = useRef(null);
   const router = useRouter();
@@ -27,7 +32,9 @@ const Comando = () => {
       setIsUser(true);
       handleBuscarAcaoDiaria();
 
-    } else {
+    }else if (username && username === 'gabriel' && authenticated === 'true'){
+      setUsuAdmin(true);
+    }else {
       router.push('/login');
     }
   }, [router]);
@@ -70,7 +77,11 @@ const Comando = () => {
               //   console.log('Fetch files completed.');
               // }
             // };
-          } else{
+          } else if(acao.acao === 'A2'){
+            setAcaoCarta(acao)
+            setCaseLetr(true);
+
+          }else{
             setAcaoDiaria(acao);
             console.log('Mandando para a api executar');
             const envioAction = await fetch('/api/executar?action=acao', {
@@ -114,6 +125,7 @@ const Comando = () => {
         }
     
         setExecutando(true);
+        
         try {
           // Enviar o ID da ação para o servidor para registrar a execução
           const response = await fetch('/api/executar?action=estado', {
@@ -149,7 +161,10 @@ const handleEscutado = async () => {
     return;
   }
 
-  setExecutando(true);
+  setTimeout(() => {
+    setExecutando(true);
+  }, 5000);
+
   try {
     // Enviar o ID da ação para o servidor para registrar a execução
     const response = await fetch('/api/executar?action=execucao', {
@@ -197,6 +212,44 @@ const handleVideoTouch = () => {
   }
 };
 
+const handleCarta = async () =>{
+  setTimeout(() => {
+    setExecutando(true);
+  }, 5000);
+  
+  try {
+    // Enviar o ID da ação para o servidor para registrar a execução
+    const response = await fetch('/api/executar?action=execucao', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ execucao:'executado',id: acaoCarta.id }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      alert(data.error || 'Erro ao Apagar a ação');
+      throw new Error('Erro ao Apgar a ação');
+    }
+
+    console.log('Estado Apagado com sucesso');
+  //   setAcaoDiaria(null); // Limpar a ação diária após execução bem sucedida
+  } catch (error) {
+    console.error('Erro ao Apagado estado:', error);
+  } finally {
+    setAcaoDiaria(false);
+    setAcaoAudio(false);
+    setCaseLetr(false);
+    setExecutando(false);
+  }
+};
+
+
+const toggleSidebar = () => {
+  setSidebarOpen(!sidebarOpen);
+};
+
 
 
       if (!isUser) {
@@ -207,14 +260,27 @@ const handleVideoTouch = () => {
 
   return (
     <div className={styles.page_container}>
-        <header className={styles.header}>
-        <nav className={styles.nav}>
-          <button className={styles.nav_link} onClick={() => router.push('/home')}>Home</button>
-          <button className={styles.nav_link} onClick={() => router.push('/direto')}>Direto</button>
-          <button className={styles.nav_link} onClick={() => router.push('/livro')}>Livro</button>
-          <button className={styles.nav_link} onClick={() => window.location.href = 'https://gch-a-paris.vercel.app'}>GCH à Paris</button>
+      {!sidebarOpen && (
+      <header className={styles.header}>
+        <nav className={styles.nav}>   
+        <button className={styles.menu_icon} onClick={toggleSidebar}>
+          <FaBars />
+        </button>
         </nav>
       </header>
+    )}
+      <div className={`${styles.sidebar} ${sidebarOpen ? styles.open : ''}`}>
+      <button className={styles.close_button} onClick={toggleSidebar}>&times;</button>
+      {UsuAdmin &&(
+      <button className={styles.nav_link} onClick={() => router.push('/inicio')}>Home</button>
+ )}
+       {!UsuAdmin &&(
+          <button className={styles.nav_link} onClick={() => router.push('/home')}>Home</button>
+       )}
+          <button className={styles.nav_link} onClick={() => router.push('/direto')}>Direto</button>
+          <button className={styles.nav_link} onClick={() => router.push('/metas')}>Metas</button>
+          <button className={styles.nav_link} onClick={() => window.location.href = 'https://gch-a-paris.vercel.app'}>GCH à Paris</button>
+      </div>
       <h1 className={styles.heading}>Ação Diária</h1>
       {acaoDiaria ? (
         <div className={styles.acao_container}>
@@ -274,12 +340,22 @@ const handleVideoTouch = () => {
 {acaoAudio ? (
         <div className={styles.acao_container}>
           <button onClick={handleEscutado} disabled={executando} className={styles.acao_button}>
-            {executando ? 'Apagando...' : 'Já escutei'}
+            {executando ? 'Apagando...' : 'Já escutei, amor'}
           </button>
         </div>
       ) : (
         <p className={styles.no_acao_text}>{!loading }</p>
       )}
+{CaseLetr ? (
+          <div className={styles.acao_container}>
+            <p>Pegue uma carta, minha querida.</p>
+            <button onClick={handleCarta} disabled={executando} className={styles.acao_button}>
+            {executando ? 'Apagando...' : 'Já Peguei, amor'}
+          </button>
+          </div>
+      ) : (
+        <p className={styles.no_acao_text}>{!loading }</p>
+)}
     </div>
   );
 };

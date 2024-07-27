@@ -1,14 +1,15 @@
-import styles from '../styles/home.module.css';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import styles from '../styles/metas.module.css';
 import { FaBars } from 'react-icons/fa';
 
-const Home = () => {
-const [isUser, setIsUser] = useState(false);
-const [sidebarOpen, setSidebarOpen] = useState(false);
-const router = useRouter();
+const Posts = () => {
+  const [isUser, setIsUser] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
+  const [UsuAdmin, setUsuAdmin] = useState(false);
 
-useEffect(() => {
+  useEffect(() => {
     console.log('useEffect triggered');
     const username = localStorage.getItem('username');
     const authenticated = localStorage.getItem('authenticated');
@@ -17,30 +18,33 @@ useEffect(() => {
     console.log('Authenticated from localStorage:', authenticated);
 
 
-    if (username && username !== 'gabriel' && authenticated === 'true') {
+    if ( authenticated === 'true') {
       setIsUser(true);
-
+      if (username && username === 'gabriel') {
+        setUsuAdmin(true);
+      }
 
     } else {
       router.push('/login');
     }
   }, [router]);
-
-  if (!isUser) {
-    return <p>Loading...</p>;
-  }
-
-  const user = localStorage.getItem('username');
-
+  
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  
 
-  return (
-    <div className={styles.page_container}>
-      {!sidebarOpen && (
+  if (!isUser) {
+    return <p>Loading...</p>;
+  }
+
+  const username = localStorage.getItem('username');
+
+    return (
+      <div className={styles.pageContainer}>
+        {!sidebarOpen && (
       <header className={styles.header}>
         <nav className={styles.nav}>   
         <button className={styles.menu_icon} onClick={toggleSidebar}>
@@ -49,20 +53,23 @@ useEffect(() => {
         </nav>
       </header>
     )}
-      <div className={`${styles.sidebar} ${sidebarOpen ? styles.open : ''}`}>
+          <div className={`${styles.sidebar} ${sidebarOpen ? styles.open : ''}`}>
           <button className={styles.close_button} onClick={toggleSidebar}>&times;</button>
+          {UsuAdmin &&(
+      <button className={styles.nav_link} onClick={() => router.push('/inicio')}>Home</button>
+ )}
+       {!UsuAdmin &&(
+          <button className={styles.nav_link} onClick={() => router.push('/home')}>Home</button>
+       )}
           <button className={styles.nav_link} onClick={() => router.push('/comando')}>Comando</button>
-          <button className={styles.nav_link} onClick={() => router.push('/metas')}>Metas</button>
           <button className={styles.nav_link} onClick={() => router.push('/direto')}>Direto</button>
           <button className={styles.nav_link} onClick={() => window.location.href = 'https://gch-a-paris.vercel.app'}>GCH à Paris</button>
-          </div>
+  </div>
       <main className={styles.main_content}>
-        <h1>Para tudo tem um jeito.</h1>
+        <h1>Nossas metas</h1>
       </main>
-    </div>
-  );
-}
-
-
-
-export default Home;
+      </div>
+    );
+  };
+  
+export default Posts;

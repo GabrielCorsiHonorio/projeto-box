@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styles from '../styles/controle.module.css';
+import { FaBars } from 'react-icons/fa';
 
 const direto = () => {
     const [isUser, setIsUser] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
     const router = useRouter();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [UsuAdmin, setUsuAdmin] = useState(false);
 
 
     useEffect(() => {
@@ -19,11 +22,16 @@ const direto = () => {
     
         if (authenticated === 'true') {
           setIsUser(true);
+          if (username && username === 'gabriel') {
+            setUsuAdmin(true);
+          }
     
         } else {
           router.push('/login');
         }
       }, [router]);
+
+
 
       if (!isUser) {
         return <p>Loading...</p>;
@@ -109,18 +117,36 @@ const direto = () => {
           }, 20000);
 
       };
+
+      const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+      };
+      
     
     
       return (
         <div className={styles.page_container}>
-        <header className={styles.header}>
-        <nav className={styles.nav}>
-          <button className={styles.nav_link} onClick={() => router.push('/home')}>Home</button>
-          <button className={styles.nav_link} onClick={() => router.push('/comando')}>Comando</button>
-          <button className={styles.nav_link} onClick={() => router.push('/livro')}>Livro</button>
-          <button className={styles.nav_link} onClick={() => window.location.href = 'https://gch-a-paris.vercel.app'}>GCH à Paris</button>
+                {!sidebarOpen && (
+      <header className={styles.header}>
+        <nav className={styles.nav}>   
+        <button className={styles.menu_icon} onClick={toggleSidebar}>
+          <FaBars />
+        </button>
         </nav>
       </header>
+    )}
+          <div className={`${styles.sidebar} ${sidebarOpen ? styles.open : ''}`}>
+      <button className={styles.close_button} onClick={toggleSidebar}>&times;</button>
+      {UsuAdmin &&(
+      <button className={styles.nav_link} onClick={() => router.push('/inicio')}>Home</button>
+ )}
+       {!UsuAdmin &&(
+          <button className={styles.nav_link} onClick={() => router.push('/home')}>Home</button>
+       )}
+          <button className={styles.nav_link} onClick={() => router.push('/comando')}>Comando</button>
+          <button className={styles.nav_link} onClick={() => router.push('/metas')}>metas</button>
+          <button className={styles.nav_link} onClick={() => window.location.href = 'https://gch-a-paris.vercel.app'}>GCH à Paris</button>
+          </div>
           <div className={styles.form_container}>
             <h1 >Controle de Ações</h1>
               <label>
