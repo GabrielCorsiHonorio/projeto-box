@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   try {
 
   const hoje = moment.tz('America/Sao_Paulo').format('YYYY-MM-DD');
-  // const hojeTeste = '2024-06-21';
+  const hojeTeste = '2024-06-21';
   // const hojeFormat = moment.tz(hoje,'America/Sao_Paulo').toISOString();
   // console.log('Valor do dia no formato', hojeFormat);
 

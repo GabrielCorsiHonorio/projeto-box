@@ -36,11 +36,12 @@ useEffect(() => {
         <nav className={styles.nav}>
           <button className={styles.nav_link} onClick={() => router.push('/comando')}>Comando</button>
           <button className={styles.nav_link} onClick={() => router.push('/livro')}>Livro</button>
-          <button className={styles.nav_link} onClick={() => router.push('/posts')}>Post</button>
+          <button className={styles.nav_link} onClick={() => router.push('/direto')}>Direto</button>
+          <button className={styles.nav_link} onClick={() => window.location.href = 'https://gch-a-paris.vercel.app'}>GCH à Paris</button>
         </nav>
       </header>
       <main className={styles.main_content}>
-        <h1>Welcome, {user}</h1>
+        <h1>Para tudo tem um jeito.</h1>
       </main>
     </div>
   );

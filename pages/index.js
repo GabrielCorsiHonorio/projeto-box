@@ -18,11 +18,11 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <div className={styles.background}>
-        {/* <img
-          src="/images/torreeiffel.jpg"
+        <img
+          src="/images/praia.jpg"
           alt="Torre Eiffel"
           className={styles.backgroundImage}
-        /> */}
+        />
       </div>
       <div className={styles.content}>
         <h1 className={styles.title}>Projeto do Gabriel e da Eshlyn</h1>

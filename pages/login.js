@@ -27,7 +27,7 @@ const handleLogin = async () => {
     localStorage.setItem('username', username);
     localStorage.setItem('authenticated', 'true');
     if (username === 'gabriel') {
-      router.push('/controle');// Redirecionar para a página de upload para o admin
+      router.push('/inicio');// Redirecionar para a página de upload para o admin
     } else {
       router.push('/home');
     }

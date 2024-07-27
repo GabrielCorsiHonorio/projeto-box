@@ -133,6 +133,13 @@ const handleEdit = (action) => {
 
   return (
     <div className={styles.page_container}>
+        <header className={styles.header}>
+        <nav className={styles.nav}>
+          <button className={styles.nav_link} onClick={() => router.push('/inicio')}>Home</button>
+          <button className={styles.nav_link} onClick={() => router.push('/livro')}>Livro</button>
+          <button className={styles.nav_link} onClick={() => router.push('/posts')}>Post</button>
+        </nav>
+      </header>
       <div className={styles.form_container}>
         <h1 >Controle de Ações</h1>
         <form onSubmit={handleSubmit} className={styles.action_form}>

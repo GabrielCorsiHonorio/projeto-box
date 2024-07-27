@@ -17,7 +17,7 @@ const direto = () => {
         console.log('Authenticated from localStorage:', authenticated);
     
     
-        if (username && username === 'gabriel' && authenticated === 'true') {
+        if (authenticated === 'true') {
           setIsUser(true);
     
         } else {
@@ -113,6 +113,14 @@ const direto = () => {
     
       return (
         <div className={styles.page_container}>
+        <header className={styles.header}>
+        <nav className={styles.nav}>
+          <button className={styles.nav_link} onClick={() => router.push('/home')}>Home</button>
+          <button className={styles.nav_link} onClick={() => router.push('/comando')}>Comando</button>
+          <button className={styles.nav_link} onClick={() => router.push('/livro')}>Livro</button>
+          <button className={styles.nav_link} onClick={() => window.location.href = 'https://gch-a-paris.vercel.app'}>GCH à Paris</button>
+        </nav>
+      </header>
           <div className={styles.form_container}>
             <h1 >Controle de Ações</h1>
               <label>

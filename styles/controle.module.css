@@ -9,6 +9,35 @@
   font-family: Arial, sans-serif;
 }
 
+.header {
+  width: 100%;
+  background-color: #122251;
+  padding: 10px 0;
+  border-radius: 5px;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 20px;
+}
+
+.nav_link {
+  color: white;
+  margin-right: 20px;
+  text-decoration: none;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: #0055a4;
+}
+
+.nav_link:hover {
+  /* text-decoration: underline; */
+  /* color: #1F3A8C; */
+  background-color: #3B8BF0;
+}
+
+
 /* Estilos para o formulário */
 .form_container {
   margin-bottom: 20px;

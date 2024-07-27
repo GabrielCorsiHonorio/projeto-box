@@ -210,8 +210,9 @@ const handleVideoTouch = () => {
         <header className={styles.header}>
         <nav className={styles.nav}>
           <button className={styles.nav_link} onClick={() => router.push('/home')}>Home</button>
+          <button className={styles.nav_link} onClick={() => router.push('/direto')}>Direto</button>
           <button className={styles.nav_link} onClick={() => router.push('/livro')}>Livro</button>
-          <button className={styles.nav_link} onClick={() => router.push('/posts')}>Post</button>
+          <button className={styles.nav_link} onClick={() => window.location.href = 'https://gch-a-paris.vercel.app'}>GCH à Paris</button>
         </nav>
       </header>
       <h1 className={styles.heading}>Ação Diária</h1>

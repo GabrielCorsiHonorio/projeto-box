@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #0055a4; /* Azul da bandeira francesa */
+    background-color: #3666F5; /* Azul da bandeira francesa */
     font-family: 'Arial', sans-serif;
     padding: 20px;
   }
@@ -46,7 +46,7 @@
   }
   
   .button {
-    background-color: #ef4135; /* Vermelho da bandeira francesa */
+    background-color: #0055a4; /* Vermelho da bandeira francesa */
     color: white;
     padding: 12px;
     border: none;
@@ -59,12 +59,12 @@
   }
   
   .button:hover {
-    background-color: #d93829;
+    background-color: #3B8BF0;
     transform: scale(1.05);
   }
   
   .error {
-    color: #ef4135; /* Vermelho da bandeira francesa */
+    color: #3B8BF0; /* Vermelho da bandeira francesa */
     margin-top: 10px;
   }
   
