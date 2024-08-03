@@ -31,6 +31,14 @@ model Action {
   nome   String?
 }
 
+model Briga {
+  id     Int    @id @default(autoincrement())
+  tema   String
+  contexto  String
+  date   DateTime?
+  comentario   String?
+}
+
 
 model ExecutedAction {
   id   Int      @id @default(autoincrement())

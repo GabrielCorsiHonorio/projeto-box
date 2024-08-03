@@ -56,17 +56,25 @@ const Posts = () => {
           <div className={`${styles.sidebar} ${sidebarOpen ? styles.open : ''}`}>
           <button className={styles.close_button} onClick={toggleSidebar}>&times;</button>
           {UsuAdmin &&(
+            <div>
       <button className={styles.nav_link} onClick={() => router.push('/inicio')}>Home</button>
+      <button className={styles.nav_link} onClick={() => router.push('/controle')}>Controle</button>
+      </div>
  )}
        {!UsuAdmin &&(
+        <div>
           <button className={styles.nav_link} onClick={() => router.push('/home')}>Home</button>
-       )}
           <button className={styles.nav_link} onClick={() => router.push('/comando')}>Comando</button>
+          </div>
+       )}
           <button className={styles.nav_link} onClick={() => router.push('/direto')}>Direto</button>
           <button className={styles.nav_link} onClick={() => window.location.href = 'https://gch-a-paris.vercel.app'}>GCH à Paris</button>
   </div>
       <main className={styles.main_content}>
         <h1>Nossas metas</h1>
+          <h2>Nossas Brigas</h2>
+          <a ></a>
+          <button className={styles.nav_link} onClick={() => router.push('/brigas')}>Brigas</button>
       </main>
       </div>
     );
